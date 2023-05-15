@@ -1,27 +1,23 @@
-from utils.get_inputs import GetInputs
-from model.iopipeline import IOPipeline
+from functions.process_inputs import InputProcessor
+from utils.setup import APISetup
+from streamlit_pages.mainpage import MainPage
+
+import streamlit as st
+
 
 if __name__ == "__main__":
 
-    INPUT_DIR = "./data/guidetoinvestors.txt"
-    OUTPUT_DIR = "./outputs/guidetoinvestors.txt"
+    # fundamental setups
+    apiSetup = APISetup()
+    setups = apiSetup.get_setups()
 
-    with open("./core/openai-api-key.txt") as f:
-        OPENAI_API_KEY = f.read()
+    mainpage = MainPage()
 
-    with open("./core/pinecone-api-key.txt") as f:
-        PINECONE_API_KEY = f.read()
+    material_inputs = None
+    if mainpage.generate_materials() is not None:
+        material_inputs = mainpage.generate_materials()
 
-    PINECONE_ENV = "asia-southeast1-gcp-free"
-    PINECONE_INDEX = "guidetoinvestors"
+        inputProcessor = InputProcessor(material_inputs, setups)
+        inputProcessor.process_input()
 
-    inputs_processor = GetInputs()
-
-    PURPOSE = inputs_processor.get_purpose()
-    KEYWORD_COUNT = inputs_processor.get_keyword_count()
-
-    iopipeline = IOPipeline(
-        INPUT_DIR, OUTPUT_DIR, PURPOSE, KEYWORD_COUNT, \
-        OPENAI_API_KEY, PINECONE_API_KEY, PINECONE_ENV, PINECONE_INDEX)
-
-    iopipeline.run()
+        print("processing inputs...")
