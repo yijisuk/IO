@@ -15,22 +15,26 @@ class PurposePrompts(Enum):
 
     NOTE_LINEAR = """
         Referring to the following description: {description},
-        write a lecturer's note that explains the concept of: {key}.
+        write a lecture-note that explains the concept of: {key}.
         No need for a heading nor title.
         Explanations should be formatted in complete sentences.
     """
 
     NOTE_BULLET = """
         Referring to the following description: {description},
-        write a lecturer's note that explains the concept of: {key}.
+        write a lecture-note that explains the concept of: {key}.
         No need for a heading nor title.
         Explanations should be formatted in bullet points.
+        For different indentations, use different bullet point shapes.
     """
     NOTE_BOTH = """
         Referring to the following description: {description},
-        write a lecturer's note that explains the concept of: {key}.
+        write a lecture-note that explains the concept of: {key}.
         No need for a heading nor title.
         Notes should involve both complete sentences and bullet points.
+        If bullet points are involved, for different indentations, use different bullet point shapes.
+        You can also use number indexes, or any form of suitable organization method.
+        Be creative!
         You determine the suitable format for each content.
     """
 

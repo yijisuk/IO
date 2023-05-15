@@ -29,8 +29,6 @@ class IOFormatter:
 
         # Input and output files
         self.input_file = input_file
-        with open(input_file) as f:
-            self.input_txt = f.read()
         self.output_file = output_file
 
         # OpenAI LLMs
@@ -54,6 +52,7 @@ class IOFormatter:
         self.embeddings = OpenAIEmbeddings(
             openai_api_key=openai_api_key, model="text-embedding-ada-002")
 
+        self.retriever = None
         if pinecone_index not in pinecone.list_indexes():
             pinecone.create_index(
                 pinecone_index, dimension=1536, metric="cosine")
@@ -68,12 +67,9 @@ class IOFormatter:
 
     def extract_keywords(self, keyword_count):
 
-        with open(self.input_file) as f:
-            pg_work = f.read()
-
         keybert_model = KeyBERT()
         keywords = keybert_model.extract_keywords(
-            pg_work,
+            self.input_file,
             top_n = keyword_count,
             keyphrase_ngram_range = (1, 2),
             stop_words = 'english'
@@ -94,7 +90,7 @@ class IOFormatter:
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=2000, chunk_overlap=0)
 
-        texts = text_splitter.split_text(self.input_txt)
+        texts = text_splitter.split_text(self.input_file)
         docs = [Document(page_content=t) for t in texts]
 
         summarizer_chain = load_summarize_chain(
@@ -129,13 +125,15 @@ class IOFormatter:
 
     def vectorstore(self):
 
-        if self.retriever is None:
+        if self.retriever is None and self.pinecone_index is not None:
             text_splitter = RecursiveCharacterTextSplitter(
                 chunk_size=2000, chunk_overlap=0)
-            texts = text_splitter.split_text(self.input_txt)
+            texts = text_splitter.split_text(self.input_file)
 
             self.retriever = Pinecone.from_texts(
-                texts, self.embeddings, self.pinecone_index)
+                texts=texts, 
+                embedding=self.embeddings, 
+                index_name=self.pinecone_index)
 
     """
     Refer to the given document,
