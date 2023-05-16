@@ -13,6 +13,7 @@ class MainPage:
         self.topic = st.text_input("", "", placeholder="Enter the topic of your lecture material", label_visibility="collapsed")
         self.generate_confirmed = False
 
+        self.configs = None
         self.notes_config = None
         self.qs_config = None
 

@@ -2,7 +2,9 @@ from functions.process_inputs import InputProcessor
 from utils.setup import APISetup
 from streamlit_pages.mainpage import MainPage
 
-import streamlit as st
+import os
+import shutil
+import pinecone
 
 
 if __name__ == "__main__":
@@ -18,6 +20,17 @@ if __name__ == "__main__":
         material_inputs = mainpage.generate_materials()
 
         inputProcessor = InputProcessor(material_inputs, setups)
-        inputProcessor.process_input()
 
         print("processing inputs...")
+        inputProcessor.process_input()
+        print("Done!")
+
+        # Empty the outputs folder
+        print("Emptying outputs folder...")
+        shutil.rmtree("./outputs")
+        os.makedirs("./outputs")
+
+        # Remove all pinecone indexes
+        print("Removing all pinecone indexes...")
+        for index in pinecone.list_indexes():
+            pinecone.delete_index(index)

@@ -54,6 +54,7 @@ class PurposePrompts(Enum):
         Questions should be formatted in complete sentences.
         You determine the suitable combination of basic and in-depth questions.
     """
+    
     QUESTIONSET_BOTH = """
         Referring to the following description: {description},
         write a set of (1) mcq questions and (2) written and open-ended questions

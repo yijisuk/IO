@@ -2,9 +2,11 @@ from model.iopipeline import IOPipeline
 from streamlit_pages.page_values import MainPageValues
 from prompts.purpose import Purpose
 from utils.setup import PineConeIndexSetup
+from utils.pdf_generator import PDFGenerator
+from utils.email_sender import EmailSender
 
+import os
 from datetime import timedelta, timezone
-from fpdf import FPDF
 
 class InputProcessor:
 
@@ -15,6 +17,7 @@ class InputProcessor:
         self.topic = self.material_inputs["topic"]
         self.materials = self.material_inputs["materials"]
         self.keyword_count = self.material_inputs["keyword_count"]
+        self.receiver = self.material_inputs["email"]
 
         self.configs = None
         if "configs" in self.material_inputs.keys():
@@ -27,8 +30,11 @@ class InputProcessor:
 
     def process_input(self):
 
+        pdf_dirs = []
+
         for material in self.materials:
 
+            config = None
             document_dirs = {}
             subtopic_contents = self.material_inputs["subtopic_contents"]
 
@@ -54,8 +60,12 @@ class InputProcessor:
                 else:
                     input_data = reference + "\n" + file_data
 
-                output_dir = "./outputs/" + \
-                    f"{self.topic}{subtopic}-{material}" + ".txt"
+                root_dir = os.path.join("outputs", self.topic.replace(' ', ''), subtopic.replace(' ', ''))
+                
+                if not os.path.exists(root_dir):
+                    os.makedirs(root_dir)
+
+                output_dir = os.path.join(root_dir, material + ".txt")
 
                 if config is not None:
                     # If creating notes,
@@ -80,7 +90,9 @@ class InputProcessor:
                 
                 else:
                     # If creating a summary,
-                    purpose = material
+                    purpose = material.lower()
+                
+                print(f"Generating {purpose} for {subtopic}...")
 
                 # Now given the subtopic and data, generate the lecture material in a desired format (material).                
                 iopipeline = IOPipeline(
@@ -92,43 +104,10 @@ class InputProcessor:
                 document_dirs[subtopic] = output_dir
 
             pdfGenerator = PDFGenerator(self.topic, material, document_dirs)
-            pdfGenerator.generate_pdf()
-            
+            pdf_output_dir = pdfGenerator.generate_pdf()
+            pdf_dirs.append(pdf_output_dir)
 
-class PDFGenerator:
+        emailSender = EmailSender()
+        emailSender.send_email(self.receiver, pdf_dirs)
 
-    def __init__(self, topic, material, document_dirs):
-
-        self.topic = topic
-        self.material = material
-        self.document_dirs = document_dirs
-    
-    def generate_pdf(self):
-
-        # Create a new PDF document
-        pdf = FPDF()
-        pdf.add_page()
-
-        # Add title
-        pdf.set_font('Arial', 'B', 16)
-        pdf.cell(0, 10, self.topic, align='C')
-        pdf.ln()
-
-        # Loop through the list of strings and add them to the PDF document
-        for subtopic in self.document_dirs.keys():
-            with open(self.document_dirs[subtopic], 'r', encoding='utf-8') as f:
-
-                # Add heading for subtopic
-                pdf.set_font('Arial', 'B', 12)
-                pdf.cell(0, 10, subtopic, align='L')
-                pdf.ln()
-
-                # Add contents for subtopic
-                document = f.read()
-                pdf.set_font('Arial', size=12)
-                pdf.multi_cell(0, 10, document)
-                pdf.ln()
-
-        # Save the PDF document
-        pdf_output_dir = "./outputs/" + f"{self.topic}-{self.material}" + ".pdf"
-        pdf.output(pdf_output_dir)
+        print(f"Sent an email to: {self.receiver}")
