@@ -104,7 +104,8 @@ class IOFormatter:
             template=ReformatKeywordsPrompts.CHAIN2_PROMPT.value
         )
 
-        reformatter_chain = LLMChain(llm=self.gpt4_llm, prompt=PROMPT)
+        # reformatter_chain = LLMChain(llm=self.gpt4_llm, prompt=PROMPT)
+        reformatter_chain = LLMChain(llm=self.gpt35_llm, prompt=PROMPT)
 
         # MAIN CHAIN
         main_chain = SequentialChain(
@@ -157,8 +158,10 @@ class IOFormatter:
                 template=GenerateGeneralDescriptionPrompts.CHAIN1_PROMPT.value
             )
 
+            # description_chain = LLMChain(
+            #     llm=self.gpt4_llm, prompt=CHAIN1_PROMPT)
             description_chain = LLMChain(
-                llm=self.gpt4_llm, prompt=CHAIN1_PROMPT)
+                llm=self.gpt35_llm, prompt=CHAIN1_PROMPT)
 
             for doc in docs_set:
                 description = description_chain.run(
@@ -187,6 +190,7 @@ class IOFormatter:
 
     def formatting(self, purpose, keyword_description_dict: dict):
 
+        PROMPT = ""
         if purpose == Purpose.NOTE_LINEAR.value:
             PROMPT = PurposePrompts.NOTE_LINEAR.value
 
@@ -212,13 +216,18 @@ class IOFormatter:
             description = keyword_description_dict[key]
 
             # CHAIN1: Process query depending on the purpose
+            if PROMPT == "":
+                print(f"Prompt empty for purpose: {purpose}")
+                
             CHAIN1_PROMPT = PromptTemplate(
                 input_variables=["description", "key"],
                 template=PROMPT,
             )
 
+            # formatting_chain = LLMChain(
+            #     llm=self.gpt4_llm, prompt=CHAIN1_PROMPT)
             formatting_chain = LLMChain(
-                llm=self.gpt4_llm, prompt=CHAIN1_PROMPT)
+                llm=self.gpt35_llm, prompt=CHAIN1_PROMPT)
 
             response = formatting_chain.run(
                 {"description": description, "key": key})
@@ -242,8 +251,10 @@ class IOFormatter:
         for key in tqdm(keyword_description_dict.keys()):
             description = keyword_description_dict[key]
 
+            # summary_chain = load_summarize_chain(
+            #     self.gpt4_llm, chain_type="map_reduce")
             summary_chain = load_summarize_chain(
-                self.gpt4_llm, chain_type="map_reduce")
+                self.gpt35_llm, chain_type="map_reduce")
 
             response = summary_chain.run([Document(page_content=description)])
 
