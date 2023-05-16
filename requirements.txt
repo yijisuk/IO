@@ -94,6 +94,7 @@ requests==2.30.0
 rich==13.3.5
 scikit-learn==1.2.2
 scipy==1.10.1
+secure-smtplib==0.1.1
 sentence-transformers==2.2.2
 sentencepiece==0.1.99
 six @ file:///home/conda/feedstock_root/build_artifacts/six_1620240208055/work
