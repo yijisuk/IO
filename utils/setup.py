@@ -15,7 +15,7 @@ class APISetup:
         # with open("./core/pinecone-api-key.txt") as f:
         #     self.pinecone_api_key = f.read()
 
-        self.pinecone_env = "asia-southeast1-gcp-free"
+        self.pinecone_env = "us-east-1-aws"
     
     def get_setups(self):
 

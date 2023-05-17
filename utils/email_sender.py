@@ -34,7 +34,7 @@ class EmailSender:
         for pdf_dir in pdf_dirs:
             with open(pdf_dir, "rb") as f:
                 pdf = MIMEApplication(f.read(), _subtype="pdf")
-                pdf_filename = pdf_dir.split("/")[-1]
+                pdf_filename = os.path.split(pdf_dir)[-1]
 
                 pdf.add_header("Content-Disposition", "attachment", filename=pdf_filename)
                 em.attach(pdf)
