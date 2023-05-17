@@ -41,7 +41,7 @@ class InputProcessor:
             if material == "Notes" and self.configs is not None:
                 config = self.configs["notes_config"]
             
-            elif material == "Questions" and self.configs is not None:
+            elif material == "Question Set" and self.configs is not None:
                 config = self.configs["qs_config"]
 
             for subtopic_content in subtopic_contents:
