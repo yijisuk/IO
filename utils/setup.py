@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, timezone
 import streamlit as st
 
+
 class APISetup:
 
     def __init__(self):
@@ -25,18 +26,19 @@ class APISetup:
             "pinecone_env": self.pinecone_env
         }
 
+
 class PineConeIndexSetup:
 
     def __init__(self, topic, timezone):
 
         self.topic = topic.replace(" ", "").lower()
         self.timezone = timezone
-    
+
     def get_index(self):
 
         if len(self.topic) > 10:
             self.topic = self.topic[:10]
-        
+
         timestamp = datetime.now(tz=self.timezone).timestamp()
         timestamp = str(timestamp).replace(".", "-")
 
