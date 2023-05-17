@@ -1,14 +1,21 @@
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
+
+import os
 import ssl
 import smtplib
+import streamlit as st
 
 class EmailSender:
 
     def __init__(self):
 
         self.sender = "ioed2023@gmail.com"
+
+        # Streamlit deployment version
+        # self.password = st.secrets["email_password"]
+
         with open("./core/email-password.txt", "r") as f:
             self.password = f.read()
     
@@ -28,7 +35,7 @@ class EmailSender:
         for pdf_dir in pdf_dirs:
             with open(pdf_dir, "rb") as f:
                 pdf = MIMEApplication(f.read(), _subtype="pdf")
-                pdf_filename = pdf_dir.split("/")[-1]
+                pdf_filename = os.path.split(pdf_dir)[-1]
 
                 pdf.add_header("Content-Disposition", "attachment", filename=pdf_filename)
                 em.attach(pdf)

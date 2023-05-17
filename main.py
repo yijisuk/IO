@@ -23,14 +23,16 @@ if __name__ == "__main__":
 
         print("processing inputs...")
         inputProcessor.process_input()
-        print("Done!")
 
         # Empty the outputs folder
-        print("Emptying outputs folder...")
-        shutil.rmtree("./outputs")
-        os.makedirs("./outputs")
+        # print("Emptying outputs folder...")
+        # shutil.rmtree("./outputs")
+        # os.makedirs("./outputs")
 
         # Remove all pinecone indexes
-        print("Removing all pinecone indexes...")
-        for index in pinecone.list_indexes():
-            pinecone.delete_index(index)
+        # print("Removing all pinecone indexes...")
+        # for index in pinecone.list_indexes():
+        #     print(f"Deleting index: {index}")
+        #     pinecone.delete_index(index)
+        
+        print("Done!")

@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import re
 from PyPDF2 import PdfReader
+from docx import Document
 
 class ResourceFormatter:
 
@@ -17,7 +18,7 @@ class ResourceFormatter:
             text = soup.get_text()
             return text
         else:
-            raise Exception('Error retrieving text from URL: {}'.format(url))
+            raise Exception(f'Error retrieving text from URL: {self.resource}')
 
     # Converts the plain text to a good-looking paragraph.
     def convert_plain_text_to_paragraph(self, txt):
@@ -61,4 +62,17 @@ class ResourceFormatter:
             text.append(page.extract_text())
             text.append("\n\n")
         
-        return ''.join(text)
+        return '\n'.join(text)
+
+    # Read the DOCX file and return the text content.
+    def get_plain_text_from_docx(self):
+
+        document = Document(self.resource)
+
+        text = []
+
+        for para in document.paragraphs:
+            text.append(para.text)
+            text.append("\n\n")
+        
+        return '\n'.join(text)
