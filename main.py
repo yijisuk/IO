@@ -1,7 +1,6 @@
 from functions.process_inputs import InputProcessor
 from utils.setup import APISetup
 from streamlit_pages.mainpage import MainPage
-from utils.pinecone_manager import PineconeManager
 
 import os
 import shutil
@@ -34,9 +33,3 @@ if __name__ == "__main__":
         # print("Removing all pinecone indexes...")
         # for index in pinecone.list_indexes():
         #     pinecone.delete_index(index)
-
-# Empty pinecone project
-# if __name__ == "__main__":
-
-#     pineconeManager = PineconeManager()
-#     pineconeManager.empty_pinecone()
