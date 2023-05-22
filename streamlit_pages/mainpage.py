@@ -30,6 +30,8 @@ class MainPage:
             self.keyword_count = st.number_input(
                 MainPageValues.KEYWORD_COUNT_Q.value,
                 min_value=1, max_value=5, value=1, step=1)
+            
+            st.write("How many key concepts should we extract from your given resource inputs?")
 
         # with depth_col:
         #     self.depth = st.selectbox(
@@ -41,6 +43,8 @@ class MainPage:
             subtopic_count = st.number_input(
                 MainPageValues.SUBTOPIC_Q.value,
                 min_value=1, max_value=5, value=1, step=1)
+            
+            st.write("How many subtopics should be covered? Each subtopic covers different topics.")
 
         if "Notes" in self.materials and "Question Set" in self.materials:
 
@@ -99,7 +103,11 @@ class MainPage:
 
             st.write("Your materials are being generated, and will be delivered to your email shortly...")
             st.write("Please check your inbox!")
-            st.write("You may close the window now.")
+            st.write("The window may display the Running progress indicator,")
+            st.write("but you can safely close the window and wait for the email to arrive.")
+            st.write("This is a prototype, so please be patient with the generation time.")
+            st.write("Materials will be delivered within 20-30 mins.")
+            st.write("\nThank you for using IO!")
         
         elif generate and not self.confirm_status():
             st.write("Either your email is invalid, or you have not filled in all the fields as required.")
