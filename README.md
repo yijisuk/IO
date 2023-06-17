@@ -3,6 +3,9 @@
 ## 🔍 Description
 IO utilizes advanced AI to transform education, enhancing engagement and interaction. Education goes beyond the simple quest for knowledge. We prioritize presenting accessible information and offering innovative learning experiences for educators and students.
 
+A submission for the [HKUST-Sino One Million Dollar Entrepreneurship Competition 2023](https://ec.hkust.edu.hk/one-million/2023/shortlisted-teams-to-round-2).
+<br>Shortlisted as Deus Platforms.
+
 This repository hosts a technical demo of a program engineered for streamlining the creation of lecture materials. Leveraging the power of advanced language models, including OpenAI's GPT-4, the program automates the development of various educational contents. 
 
 Users provide the essential structure and reference materials in the form of URLs or .pdf/.docx/.txt files. From these, the system auto-generates:
