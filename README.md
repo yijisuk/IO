@@ -21,7 +21,21 @@ With this program, users can use a variety of file formats (URL, pdf, docx, txt)
 ## 🦾 Running the Code
 To run the code, follow these steps:
 
+**First, clone the repository**
+
+```git clone https://github.com/yijisuk/IO.git```
+
+**Install the dependencies**
+
+```pip install -r requirements.txt```
+
+**Add configurations:**
+
 1. Create a ```core``` folder
-2. Create and save your OpenAI API Key in ```openai-api-key.txt```
-3. Create and save Pinecone API Key in ```pinecone-api-key.txt```
+2. Create and save your [OpenAI](https://openai.com/product) API Key in ```openai-api-key.txt``` - OpenAI's GPT models will be the main language models used in this program.
+3. Create and save [Pinecone](https://www.pinecone.io/) API Key in ```pinecone-api-key.txt``` - Pinecone is a vector database which will store the vectorized lecture reference materials, formatted for easy reference by language models.
 4. Save the passphrase of the email address in ```email-password.txt``` - this will be used for sending out generated lecture materials.
+
+**Run the main Python file**
+
+```python main.py```
